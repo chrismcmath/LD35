@@ -7,12 +7,15 @@ namespace Rf.Controls {
         public static Action OnInputStart;
         public static Action OnInputEnd;
 
-        //NOTE: apparently the fastest method
-        //(http://gamedev.stackexchange.com/questions/114121/most-efficient-way-to-convert-vector3-to-vector2)
-        public static Vector2 Position {
+        public static Vector3 ScreenPosition {
             get {
-                Vector2 v2 = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-                return v2;
+                return Input.mousePosition;
+            }
+        }
+
+        public static Vector3 WorldPosition {
+            get {
+                return Camera.main.ScreenToWorldPoint(Input.mousePosition);
             }
         }
 
