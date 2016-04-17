@@ -2,6 +2,8 @@ using UnityEngine;
 using System;
 using System.Collections;
 
+using Rf.Core;
+
 namespace Rf.Controllers {
     public class BallController : MonoBehaviour {
         public const float ARBITRARY_SMALL_NUMBER = 0.1f;
@@ -59,6 +61,11 @@ namespace Rf.Controllers {
             if (LayerMask.LayerToName(other.gameObject.layer) != "Shape") return;
             Debug.LogFormat("OnTriggerEnter2D, layer: {0}", LayerMask.LayerToName(other.gameObject.layer));
             Raycast(Tail);
+        }
+
+        private void OnTriggerStay2D(Collider2D other) {
+            if (LayerMask.LayerToName(other.gameObject.layer) != "Shape") return;
+            _Rigidbody.AddForce(Config.BackSpeed * 2f);
         }
 
         private void OnTriggerExit2D(Collider2D other) {

@@ -1,0 +1,21 @@
+0) Intro
+
+Movement
+1) Straight shot
+2) Up
+3) Trick corner shot
+
+Two Balls
+4) Two balls easy
+5) Two balls med
+6) Two balls difficult
+
+Refraction
+7) easy
+8) med
+9) difficult
+
+Three Balls
+10) easy
+11) med
+12) difficult
