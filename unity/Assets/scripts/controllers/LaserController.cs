@@ -9,18 +9,30 @@ namespace Rf.View.Controllers {
         private LayerMask _Mask;
         private Rigidbody2D _Rigidbody;
 
-        private void Start() {
+        public void Start() {
             _Mask = 1 << LayerMask.NameToLayer("Shape");
             _Rigidbody = GetComponent<Rigidbody2D>();
 
-            Reboost();
+            Reboost(10f);
+        }
+
+        public void Pot(Vector2 position) {
+            Destroy(gameObject);
+        }
+
+        private void OnCollisionExit2D(Collision2D coll) {
+            transform.up = _Rigidbody.velocity.normalized;
         }
 
         private void OnTriggerEnter2D(Collider2D other) {
+            if (LayerMask.LayerToName(other.gameObject.layer) != "Shape") return;
+            Debug.LogFormat("OnTriggerEnter2D, layer: {0}", LayerMask.LayerToName(other.gameObject.layer));
             Raycast(Tail);
         }
 
         private void OnTriggerExit2D(Collider2D other) {
+            if (LayerMask.LayerToName(other.gameObject.layer) != "Shape") return;
+            Debug.LogFormat("OnTriggerExit2D, layer: {0}", LayerMask.LayerToName(other.gameObject.layer));
             Raycast(Head, false);
         }
 
@@ -30,8 +42,15 @@ namespace Rf.View.Controllers {
                 direction *= -1;
             }
             RaycastHit2D hit = Physics2D.Raycast(from.position, direction, Mathf.Infinity, _Mask); 
-            if (hit != null) {
+            if (hit != null && hit.transform != null) {
                 float incidence = AngleSigned(hit.normal, direction * -1);
+                Debug.LogFormat("hit: {0}", hit.transform);
+                Debug.LogFormat("Hit: {0}, Normal: {1}, Direction: {2}, Incidence: {3}",
+                        hit.transform.name,
+                        hit.normal,
+                        direction * -1,
+                        incidence);
+
                 Refract(incidence, hit.normal, forward);
             }
         }
@@ -75,9 +94,12 @@ namespace Rf.View.Controllers {
             GameObject instance = Instantiate(Resources.Load("game/lasers/laser1", typeof(GameObject))) as GameObject;
         }
 
-        private void Reboost() {
+        private void Reboost(float speed = 0f) {
+            if (speed == 0f) {
+                speed = _Rigidbody.velocity.magnitude;
+            }
             _Rigidbody.velocity = Vector2.zero;
-            _Rigidbody.AddForce(transform.up * 10f, ForceMode2D.Impulse);
+            _Rigidbody.AddForce(transform.up * speed, ForceMode2D.Impulse);
         }
 
         public float AngleSigned(Vector3 v1, Vector3 v2) {
