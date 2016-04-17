@@ -15,8 +15,6 @@ namespace Rf.View {
         private LineModel _LineModel;
         private MeshFilter _MeshFilter;
 
-        public bool flipNormals = false;
-
         public void Start() {
             _MeshFilter= gameObject.AddComponent<MeshFilter>();
             _LineModel = Global.Instance.LineModel;
@@ -29,6 +27,10 @@ namespace Rf.View {
             Vector2[] points = _LineModel.GetWorldPoints();
             if (points.Length > 2) {
                 CreateShape(points);
+            } else {
+                if (OnNewShape != null) {
+                    OnNewShape();
+                }
             }
         }
 
@@ -46,6 +48,11 @@ namespace Rf.View {
             if (OnNewShape != null) {
                 OnNewShape();
             }
+
+            GameObject go = Instantiate(Resources.Load("game/cutout") as GameObject);
+            go.transform.position = transform.position;
+            go.transform.rotation = transform.rotation;
+            go.GetComponent<ShapeCutoutView>().Cutout(mesh);
         }
 
         private int[] GetMeshTriangles(Vector2[] points) {

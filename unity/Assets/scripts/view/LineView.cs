@@ -4,24 +4,24 @@ using System.Collections;
 
 using Vectrosity;
 
+using Rf.Controllers;
 using Rf.Controls;
 using Rf.Core;
 using Rf.Models;
 
 namespace Rf.View {
     public class LineView : MonoBehaviour {
-        public int LineWidth = 30;
+        public int LineWidth = 5;
         public Color LineColor = Color.black;
+        public Material Mat;
 
         private Vector2[] _Points;
-        private Material  _Material;
         private LineModel _LineModel;
         private VectorLine _LineRenderer;
 
         public void Start() {
             _LineModel = Global.Instance.LineModel;
 
-            _Material = new Material(Shader.Find("Diffuse"));
             _Points = new Vector2[16000];
 
             LineModel.OnLineFinalized += OnLineFinalized;
@@ -33,17 +33,22 @@ namespace Rf.View {
         }
 
         private void OnInputStart() {
-            ResetLine();
+            if (GameController.CanDraw) {
+                ResetLine();
+            }
         }
 
         private void OnLineFinalized() {
-            ResetLine();
+            Debug.LogFormat("destroy line");
+            VectorLine.Destroy(ref _LineRenderer);
         }
 
         public void LateUpdate() {
             Vector2[] points = _LineModel.GetPoints();
             if (_LineRenderer != null) {
                 _LineRenderer.maxDrawIndex = Mathf.Max(0, points.Length - 1);
+            } else {
+                return;
             }
 
             for (int i = 0; i < points.Length; i++) {
@@ -56,11 +61,9 @@ namespace Rf.View {
         }
 
         private void ResetLine() {
-            if (_LineRenderer != null) {
-                VectorLine.Destroy(ref _LineRenderer);
-            }
+            VectorLine.Destroy(ref _LineRenderer);
 
-            _LineRenderer = new VectorLine("Line", _Points, _Material, 3.0f, LineType.Continuous, Joins.Weld); 
+            _LineRenderer = new VectorLine("Line", _Points, Mat, LineWidth, LineType.Continuous, Joins.Fill); 
         }
     }
 }
