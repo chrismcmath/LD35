@@ -1,10 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
-namespace Rf.View.Controllers {
+namespace Rf.Controllers {
     public class PocketGoalController : MonoBehaviour {
         private void OnTriggerEnter2D(Collider2D other) {
-            other.gameObject.GetComponentInParent<LaserController>().Pot(transform.position);
+            other.gameObject.GetComponentInParent<BallController>().Pot(transform.position);
         }
 
         /*

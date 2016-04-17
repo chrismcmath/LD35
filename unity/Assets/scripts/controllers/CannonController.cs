@@ -1,10 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace Rf.View.Controllers {
+using Rf.View;
+
+namespace Rf.Controllers {
     public class CannonController : MonoBehaviour {
+        public BallController Ball;
+        public float Speed = 10f;
+
+        private Animator _Animator;
+
         void Start () {
             ShapeView.OnNewShape += OnNewShape;
+            _Animator = GetComponent<Animator>();
+        }
+
+        void OnDestroy() {
+            ShapeView.OnNewShape -= OnNewShape;
         }
 
         void Update () {
@@ -15,9 +27,11 @@ namespace Rf.View.Controllers {
         }
 
         private void Fire() {
-            GameObject instance = Instantiate(Resources.Load("game/lasers/laser1", typeof(GameObject))) as GameObject;
-            instance.transform.position = transform.position;
-            instance.transform.rotation = transform.rotation;
+            _Animator.Play("strike");
+        }
+
+        public void HitBall() {
+            Ball.Strike(transform.up, Speed);
         }
     }
 }

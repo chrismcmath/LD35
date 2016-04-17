@@ -22,6 +22,7 @@ namespace Rf.View {
             _LineModel = Global.Instance.LineModel;
 
             LineModel.OnLineFinalized += OnLineFinalized;
+            Global.OnNewGame += OnNewGame;
         }
 
         private void OnLineFinalized() {
@@ -29,6 +30,10 @@ namespace Rf.View {
             if (points.Length > 2) {
                 CreateShape(points);
             }
+        }
+
+        private void OnNewGame(string level) {
+            _MeshFilter.mesh = null;
         }
 
         private void CreateShape(Vector2[] points) {

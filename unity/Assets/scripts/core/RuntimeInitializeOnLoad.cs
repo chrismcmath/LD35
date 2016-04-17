@@ -11,7 +11,8 @@ namespace GB.Core {
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)] 
         static void GlobalSetup() 
         {
-            if (_Global == null) {
+            Rf.Core.Global[] g = FindObjectsOfType<Rf.Core.Global>();
+            if (_Global == null && g.Length == 0) {
                 _Global = GameObject.Instantiate(Resources.Load(GLOBAL_PATH) as GameObject);
                 _Global.name = GLOBAL_NAME;
             }

@@ -1,23 +1,54 @@
 using UnityEngine;
+using System;
 using System.Collections;
 
-namespace Rf.View.Controllers {
-    public class LaserController : MonoBehaviour {
+namespace Rf.Controllers {
+    public class BallController : MonoBehaviour {
+        public const float ARBITRARY_SMALL_NUMBER = 0.1f;
+        public const float REFRACTIVE_INDEX = 2.0f;
+
+        public static Action OnBallStrike;
+
         public Transform Head;
         public Transform Tail;
+
+        private bool _Potted = false;
+        public bool Potted {
+            get {
+                return _Potted;
+            }
+        }
 
         private LayerMask _Mask;
         private Rigidbody2D _Rigidbody;
 
+        public bool Stopped {
+            get {
+                if (_Rigidbody.velocity.magnitude < ARBITRARY_SMALL_NUMBER) {
+                    _Rigidbody.velocity = Vector2.zero;
+                    return true;
+                }
+                return false;
+            }
+        }
+
         public void Start() {
             _Mask = 1 << LayerMask.NameToLayer("Shape");
             _Rigidbody = GetComponent<Rigidbody2D>();
+        }
 
-            Reboost(10f);
+        public void Strike(Vector2 direction, float speed) {
+            transform.up = direction;
+            Reboost(speed);
+
+            if (OnBallStrike != null) {
+                OnBallStrike();
+            }
         }
 
         public void Pot(Vector2 position) {
-            Destroy(gameObject);
+            _Potted = true;
+            gameObject.SetActive(false);
         }
 
         private void OnCollisionExit2D(Collision2D coll) {
@@ -62,9 +93,9 @@ namespace Rf.View.Controllers {
         private void Refract(float incidence, Vector2 normal, bool forward) {
             float snell;
             if (forward) {
-                snell = Snell(1f, incidence, 1.5f);
+                snell = Snell(1f, incidence, REFRACTIVE_INDEX);
             } else {
-                snell = Snell(1.5f, incidence, 1.0f);
+                snell = Snell(REFRACTIVE_INDEX, incidence, 1.0f);
             }
 
             if (forward) {
@@ -72,14 +103,16 @@ namespace Rf.View.Controllers {
             } 
 
             float delay = 50f;
-            Debug.DrawRay(transform.position, transform.up, Color.red, delay);
+            //Debug.DrawRay(transform.position, transform.up, Color.red, delay);
 
             transform.up = Quaternion.Euler(0, 0, (snell)) * normal;
             Reboost();
 
+            /*
             Debug.DrawRay(transform.position, normal, Color.blue, delay);
             Debug.DrawRay(transform.position, normal * -1, Color.blue, delay);
             Debug.DrawRay(transform.position, transform.up, Color.yellow, delay);
+            */
         }
 
         private float Snell(float incidentIndex, float incidenceAngle, float refractiveIndex) {
