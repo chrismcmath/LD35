@@ -46,7 +46,7 @@ namespace Rf.Controllers {
         }
 
         private void CheckLoseCondition() {
-            if (_AttemptInProgress && AllBallsStopped()) {
+            if (_AttemptInProgress && AllBallsStopped() && !AllBallsPrePotted()) {
                 Lose();
             }
         }
@@ -87,6 +87,15 @@ namespace Rf.Controllers {
         private bool AllBallsPotted() {
             foreach (BallController ball in _Balls) {
                 if (!ball.Potted) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private bool AllBallsPrePotted() {
+            foreach (BallController ball in _Balls) {
+                if (!ball.PrePotted) {
                     return false;
                 }
             }

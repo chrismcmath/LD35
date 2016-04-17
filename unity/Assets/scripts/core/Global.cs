@@ -18,13 +18,24 @@ namespace Rf.Core {
         public LineModel LineModel;
         private GameController _Game;
 
+        private bool _Started = false;
+
         public void Awake() {
             LineModel = GetComponentInChildren<LineModel>();
             _Game = GetComponent<GameController>();
         }
 
         public void Start() {
-            GoToLevel(CurrentLevel.ToString());
+            if (SceneManager.GetActiveScene().name == "global") {
+                GameController.CanDraw = false;
+            }
+        }
+
+        public void Update() {
+            if (!_Started && Input.GetMouseButtonDown(0)) {
+                _Started = true;
+                GoToLevel(CurrentLevel.ToString());
+            }
         }
 
         public void GoToLevel(string level) {
@@ -35,7 +46,7 @@ namespace Rf.Core {
         }
 
         public void NextLevel() {
-            //CurrentLevel++;
+            CurrentLevel++;
             GoToLevel(CurrentLevel.ToString());
         }
 

@@ -7,7 +7,9 @@ using Rf.Utils;
 
 namespace Rf.Models {
     public class LineModel : MonoBehaviour {
+        public delegate void PointAddedDelegate(Vector2 point);
         public static Action OnLineFinalized;
+        public static PointAddedDelegate OnPointAdded;
 
         public float AngleThreshold = 10f;
         public float DistanceThreshold = 5f;
@@ -20,7 +22,13 @@ namespace Rf.Models {
         }
 
         public void AddPoint(Vector2 point) {
+            if (_Points.Count > 0 && 
+                    Vector2.Distance(point, _Points[_Points.Count - 1]) < 1f) return;
             _Points.Add(point);
+
+            if (OnPointAdded != null) {
+                OnPointAdded(point);
+            }
         }
 
         public void ClearPoints() {

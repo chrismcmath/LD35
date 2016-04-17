@@ -12,6 +12,8 @@ namespace Rf.View {
     public class ShapeView : MonoBehaviour {
         public static Action OnNewShape;
 
+        public AudioSource GearsSfx;
+
         private LineModel _LineModel;
         private MeshFilter _MeshFilter;
 
@@ -26,6 +28,7 @@ namespace Rf.View {
         private void OnLineFinalized() {
             Vector2[] points = _LineModel.GetWorldPoints();
             if (points.Length > 2) {
+                GearsSfx.Play();
                 CreateShape(points);
             } else {
                 if (OnNewShape != null) {
@@ -35,7 +38,12 @@ namespace Rf.View {
         }
 
         private void OnNewGame(string level) {
+            GearsSfx.Stop();
             _MeshFilter.mesh = null;
+            PolygonCollider2D col = GetComponent<PolygonCollider2D>();
+            if (col != null) {
+                col.enabled = false;
+            }
         }
 
         private void CreateShape(Vector2[] points) {
@@ -64,6 +72,7 @@ namespace Rf.View {
                 Destroy(col);
             }
             col = gameObject.AddComponent<PolygonCollider2D>();
+            col.enabled = true;
             col.SetPath(0, points);
 
             return triangulator.Triangulate();

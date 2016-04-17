@@ -6,6 +6,8 @@ using Rf.View;
 namespace Rf.Controllers {
     public class CannonController : MonoBehaviour {
         public BallController Ball;
+        public AudioSource PullBack;
+        public AudioSource Thrust;
         public float Speed = 10f;
 
         private Animator _Animator;
@@ -27,7 +29,13 @@ namespace Rf.Controllers {
         }
 
         private void Fire() {
+            PullBack.Play();
             _Animator.Play("strike");
+        }
+
+        public void ThrustForward() {
+            Thrust.Play();
+            Ball.Strike(transform.up, Speed);
         }
 
         public void HitBall() {

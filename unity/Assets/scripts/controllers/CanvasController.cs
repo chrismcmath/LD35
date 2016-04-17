@@ -12,6 +12,9 @@ namespace Rf.Controllers {
         public Animator Win;
         public Animator Lose;
         public Animator Level;
+        public AudioSource WinSfx;
+        public AudioSource LoseSfx;
+        public AudioSource NewLevelSfx;
         public ParticleSystem WinParticles;
 
         public void Awake() {
@@ -28,6 +31,7 @@ namespace Rf.Controllers {
 
         public void OnNewGame(string level) {
             Level.Play("InOut");
+            NewLevelSfx.Play();
             foreach (Text t in Level.GetComponentsInChildren<Text>()) {
                 t.text = level;
             }
@@ -36,6 +40,7 @@ namespace Rf.Controllers {
         public void OnWin() {
             Debug.LogFormat("OnWin");
             Win.Play("InOut");
+            WinSfx.Play();
             WinParticles.Play();
             StartCoroutine(StopParticles(WinParticles));
         }
@@ -48,6 +53,7 @@ namespace Rf.Controllers {
         public void OnLose() {
             Debug.LogFormat("OnLose");
             Lose.Play("InOut");
+            LoseSfx.Play();
         }
     }
 }

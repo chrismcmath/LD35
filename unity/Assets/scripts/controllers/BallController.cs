@@ -14,6 +14,9 @@ namespace Rf.Controllers {
         public Transform Head;
         public Transform Tail;
 
+        public AudioSource StrikeSfx;
+        public AudioSource BumperSfx;
+
         private float _PotTime;
         private Vector3 _InitScale;
         private Vector2 _InitPosition;
@@ -21,6 +24,11 @@ namespace Rf.Controllers {
 
         private bool _Potted = false;
         public bool Potted {
+            get {
+                return _Potted && Time.time > _PotTime + 0.5f;
+            }
+        }
+        public bool PrePotted {
             get {
                 return _Potted;
             }
@@ -54,6 +62,7 @@ namespace Rf.Controllers {
         public void Strike(Vector2 direction, float speed) {
             transform.up = direction;
             Reboost(speed);
+            StrikeSfx.Play();
 
             if (OnBallStrike != null) {
                 OnBallStrike();
@@ -78,6 +87,7 @@ namespace Rf.Controllers {
 
         private void OnCollisionExit2D(Collision2D coll) {
             transform.up = _Rigidbody.velocity.normalized;
+            BumperSfx.Play();
         }
 
         private void OnTriggerEnter2D(Collider2D other) {

@@ -29,7 +29,6 @@ namespace Rf.View {
             _Points = new Vector2[16000];
 
             LineModel.OnLineFinalized += OnLineFinalized;
-            LineModel.OnPointAdded += OnPointAdded;
             Rf.Controls.Controls.OnInputStart += OnInputStart;
         }
 
@@ -51,15 +50,7 @@ namespace Rf.View {
             }
         }
 
-        private void OnPointAdded(Vector2 point) {
-            float mag = Vector2.Distance(point, _LineModel.GetPoints()[_LineModel.GetPoints().Length - 2]);
-            Debug.LogFormat("mag: {0}", mag);
-            _Pitch = Mathf.Max(Mathf.Min(mag * 0.5f, 2f), 0.5f);
-        }
-
         private void OnLineFinalized() {
-            CuttingSfx.Stop();
-            RipSfx.Play();
             Debug.LogFormat("destroy line");
             VectorLine.Destroy(ref _LineRenderer);
         }
