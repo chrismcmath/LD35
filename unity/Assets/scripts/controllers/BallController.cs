@@ -14,6 +14,11 @@ namespace Rf.Controllers {
         public Transform Head;
         public Transform Tail;
 
+        private float _PotTime;
+        private Vector3 _InitScale;
+        private Vector2 _InitPosition;
+        private Vector2 _TargetPosition;
+
         private bool _Potted = false;
         public bool Potted {
             get {
@@ -39,6 +44,13 @@ namespace Rf.Controllers {
             _Rigidbody = GetComponent<Rigidbody2D>();
         }
 
+        public void Update() {
+            if (_Potted) {
+                transform.position = Vector2.Lerp(_InitPosition, _TargetPosition, Time.time - _PotTime);
+                transform.localScale = Vector3.Lerp(_InitScale, _InitScale / 2f, Time.time - _PotTime);
+            }
+        }
+
         public void Strike(Vector2 direction, float speed) {
             transform.up = direction;
             Reboost(speed);
@@ -50,6 +62,17 @@ namespace Rf.Controllers {
 
         public void Pot(Vector2 position) {
             _Potted = true;
+            _PotTime = Time.time;
+
+            _InitPosition = transform.position;
+            _InitScale = transform.localScale;
+            _TargetPosition = position;
+
+            StartCoroutine(DeactivateAfterWait());
+        }
+
+        IEnumerator DeactivateAfterWait() {
+            yield return new WaitForSeconds(1f);
             gameObject.SetActive(false);
         }
 
