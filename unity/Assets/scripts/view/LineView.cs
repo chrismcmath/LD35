@@ -21,13 +21,11 @@ namespace Rf.View {
         public void Start() {
             _LineModel = Global.Instance.LineModel;
 
+            _Material = new Material(Shader.Find("Diffuse"));
+            _Points = new Vector2[16000];
+
             LineModel.OnLineFinalized += OnLineFinalized;
             Rf.Controls.Controls.OnInputStart += OnInputStart;
-
-            _Material = new Material(Shader.Find("Diffuse"));
-            VectorLine.SetLine (Color.green, new Vector2(0, 0), new Vector2(Screen.width-1, Screen.height-1));
-
-            _Points = new Vector2[16000];
         }
 
         public void OnDestroy() {

@@ -9,11 +9,11 @@ namespace Rf.Models {
     public class LineModel : MonoBehaviour {
         public static Action OnLineFinalized;
 
-        public List<Vector2> _Points;
         public float AngleThreshold = 10f;
         public float DistanceThreshold = 5f;
 
         private int _Index;
+        private List<Vector2> _Points;
 
         public void Start() {
             _Points = new List<Vector2>();
@@ -61,8 +61,6 @@ namespace Rf.Models {
                 }
 
                 float degrees = UnityEngine.Mathf.Rad2Deg * radians;
-                float pre = degrees;
-
                 while (degrees < 0f) {
                     degrees += 360f;
                 }
@@ -84,6 +82,14 @@ namespace Rf.Models {
 
         public Vector2[] GetPoints() {
             return _Points.ToArray();
+        }
+
+        public Vector2[] GetWorldPoints() {
+            Vector2[] worldPoints = new Vector2[_Points.Count];
+            for (int i = 0; i < _Points.Count; i++) {
+                worldPoints[i] = Camera.main.ScreenToWorldPoint(_Points[i]);
+            }
+            return worldPoints;
         }
     }
 }
