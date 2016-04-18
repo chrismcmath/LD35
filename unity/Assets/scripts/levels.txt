@@ -1,21 +1,22 @@
 0) Intro
 
-Movement
+Basics
 1) Straight shot
-2) Up
-3) Trick corner shot
+2) Diagonal
+3) Bounce
+
+Movement
+4) Straight shot
+5) Up
+6) Trick corner shot
 
 Two Balls
-4) Two balls easy
-5) Two balls med
-6) Two balls difficult
+7) Two balls easy
+8) Two balls med
+9) Two balls difficult
 
-Refraction
-7) easy
-8) med
-9) difficult
+Hard
+10) Refraction
+11) Three Balls
+12) Extra balls
 
-Three Balls
-10) easy
-11) med
-12) difficult

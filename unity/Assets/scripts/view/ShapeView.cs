@@ -4,6 +4,7 @@ using System.Collections;
 
 using Vectrosity;
 
+using Rf.Controllers;
 using Rf.Controls;
 using Rf.Core;
 using Rf.Models;
@@ -21,6 +22,9 @@ namespace Rf.View {
             _MeshFilter= gameObject.AddComponent<MeshFilter>();
             _LineModel = Global.Instance.LineModel;
 
+            GameController.OnWin += OnWin;
+            GameController.OnLose += OnLose;
+
             LineModel.OnLineFinalized += OnLineFinalized;
             Global.OnNewGame += OnNewGame;
         }
@@ -35,6 +39,14 @@ namespace Rf.View {
                     OnNewShape();
                 }
             }
+        }
+
+        private void OnWin() {
+            GearsSfx.Stop();
+        }
+
+        private void OnLose() {
+            GearsSfx.Stop();
         }
 
         private void OnNewGame(string level) {

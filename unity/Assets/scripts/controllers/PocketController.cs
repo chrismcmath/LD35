@@ -22,7 +22,7 @@ namespace Rf.View.Controllers {
         }
 
         private void OnTriggerStay2D(Collider2D other) {
-            Debug.LogFormat(" [Pocket] OnTriggerStay {0}", other.name);
+            //Debug.LogFormat(" [Pocket] OnTriggerStay {0}", other.name);
         }
 
         private void OnTriggerExit2D(Collider2D other) {

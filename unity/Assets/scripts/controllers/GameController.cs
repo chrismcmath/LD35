@@ -22,6 +22,10 @@ namespace Rf.Controllers {
             Rf.Controls.Controls.OnDoubleClick += OnDoubleClick;
         }
 
+        public void Start() {
+            PrepScene();
+        }
+
         public void Update() {
             CheckWinCondition();
             CheckLoseCondition();
@@ -63,6 +67,7 @@ namespace Rf.Controllers {
             if (_AttemptInProgress && AllBallsPotted()) {
                 _AttemptInProgress = false;
                 if (OnWin != null) {
+                    Debug.LogFormat("on win, balls: {0}", _Balls.Count);
                     OnWin();
                 }
                 StartCoroutine(NextLevelAfterWait());

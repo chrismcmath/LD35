@@ -18,7 +18,7 @@ namespace Rf.Core {
         public LineModel LineModel;
         private GameController _Game;
 
-        private bool _Started = false;
+        private bool _Started = true;
 
         public void Awake() {
             LineModel = GetComponentInChildren<LineModel>();
@@ -27,14 +27,17 @@ namespace Rf.Core {
 
         public void Start() {
             if (SceneManager.GetActiveScene().name == "global") {
+                _Started = false;
                 GameController.CanDraw = false;
+            } else {
+                CurrentLevel = int.Parse(SceneManager.GetActiveScene().name);
             }
         }
 
         public void Update() {
             if (!_Started && Input.GetMouseButtonDown(0)) {
                 _Started = true;
-                GoToLevel(CurrentLevel.ToString());
+                NextLevel();
             }
         }
 
@@ -46,6 +49,7 @@ namespace Rf.Core {
         }
 
         public void NextLevel() {
+            Debug.LogFormat("NextLevel");
             CurrentLevel++;
             GoToLevel(CurrentLevel.ToString());
         }

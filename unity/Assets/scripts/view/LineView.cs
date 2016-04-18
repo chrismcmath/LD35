@@ -52,8 +52,10 @@ namespace Rf.View {
         }
 
         private void OnPointAdded(Vector2 point) {
-            float mag = Vector2.Distance(point, _LineModel.GetPoints()[_LineModel.GetPoints().Length - 2]);
-            Debug.LogFormat("mag: {0}", mag);
+            float mag = 1f;
+            if (_LineModel.GetPoints().Length > 1) {
+                mag = Vector2.Distance(point, _LineModel.GetPoints()[_LineModel.GetPoints().Length - 2]);
+            }
             _Pitch = Mathf.Max(Mathf.Min(mag * 0.5f, 2f), 0.5f);
         }
 
